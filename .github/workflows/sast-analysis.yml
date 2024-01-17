@@ -16,14 +16,14 @@ jobs:
           directory: .
           framework: terraform 
           output_format: json
-          output_file_path: results.json
+          output_file_path: results.sarif
           skip_check: LOW
       - name: Checkov artifact
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: Checkov artifact
-          path: results.json
+          path: results.sarif
   semgrep_analysis:
     name: Semgrep Analysis
     runs-on: ubuntu-latest
