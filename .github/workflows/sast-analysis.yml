@@ -1,0 +1,36 @@
+name: "SAST Analysis"
+
+on: push
+
+jobs:
+  checkov_analysis:
+    name: Checkov Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Checkov Analysis
+        id: checkov
+        continue-on-error: true
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform 
+          output_format: json
+          output_file_path: results.json
+          skip_check: LOW
+      - name: Checkov artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Checkov artifact
+          path: results.json
+  semgrep_analysis:
+    name: Semgrep Analysis
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+    steps:
+      - uses: actions/checkout@v3
+      - run: semgrep ci
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
