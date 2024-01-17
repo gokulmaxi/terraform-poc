@@ -15,7 +15,7 @@ jobs:
         with:
           directory: .
           framework: terraform 
-          output_format: json
+          output_format: sarif
           output_file_path: results.sarif
           skip_check: LOW
       - name: Checkov artifact
